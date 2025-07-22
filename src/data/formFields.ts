@@ -196,10 +196,11 @@ export function createFormField(type: FormFieldType): FormField {
     case 'header':
       return {
         ...baseField,
-        label: 'Header',
+        label: 'Welcome to Our Form',
         properties: {
           ...baseField.properties,
-          width: 'full'
+          width: 'full',
+          description: 'Please fill out the information below to get started.'
         },
         advanced: {
           ...baseField.advanced,
@@ -212,10 +213,11 @@ export function createFormField(type: FormFieldType): FormField {
     case 'message':
       return {
         ...baseField,
-        label: 'Paragraph',
+        label: 'Paragraph Text',
         properties: {
           ...baseField.properties,
-          width: 'full'
+          width: 'full',
+          description: 'This is a paragraph of text. You can edit this content in the properties panel to provide instructions, descriptions, or any other information for your form users.'
         },
         advanced: {
           ...baseField.advanced,
@@ -229,7 +231,11 @@ export function createFormField(type: FormFieldType): FormField {
         label: 'Image',
         properties: {
           ...baseField.properties,
-          width: 'full'
+          width: 'full',
+          imageUrl: '',
+          altText: 'Image description',
+          maxHeight: '400px',
+          description: 'Add an image URL in the properties panel to display an image here.'
         },
         advanced: {
           ...baseField.advanced,
@@ -572,10 +578,12 @@ export const DRAG_ITEMS: DragItem[] = [
   { id: 'password', type: 'password', label: 'Password', icon: 'Key', category: 'fields' },
   { id: 'number', type: 'number', label: 'Number', icon: 'Hash', category: 'fields' },
   { id: 'phone', type: 'phone', label: 'Phone', icon: 'Phone', category: 'fields' },
+  { id: 'url', type: 'url', label: 'URL', icon: 'Link', category: 'fields' },
   { id: 'textarea', type: 'textarea', label: 'Text Area', icon: 'FileText', category: 'fields' },
   
   // Selection fields
   { id: 'select', type: 'select', label: 'Select', icon: 'ChevronDown', category: 'fields' },
+  { id: 'multiselect', type: 'multiselect', label: 'Multi Select', icon: 'List', category: 'fields' },
   { id: 'autocomplete', type: 'autocomplete', label: 'Auto Complete', icon: 'Search', category: 'fields' },
   { id: 'radio', type: 'radio', label: 'Radio Group', icon: 'Circle', category: 'fields' },
   { id: 'checkbox', type: 'checkbox', label: 'Checkbox Group', icon: 'Square', category: 'fields' },
@@ -584,10 +592,13 @@ export const DRAG_ITEMS: DragItem[] = [
   // Date/Time fields
   { id: 'date', type: 'date', label: 'Date', icon: 'Calendar', category: 'fields' },
   { id: 'time', type: 'time', label: 'Time', icon: 'Clock', category: 'fields' },
+  { id: 'datetime', type: 'datetime', label: 'Date & Time', icon: 'CalendarClock', category: 'fields' },
   
   // Special fields
   { id: 'file', type: 'file', label: 'File Upload', icon: 'Upload', category: 'fields' },
   { id: 'rating', type: 'rating', label: 'Rating', icon: 'Star', category: 'fields' },
+  { id: 'range', type: 'range', label: 'Range Slider', icon: 'Minus', category: 'fields' },
+  { id: 'signature', type: 'signature', label: 'Signature', icon: 'PenTool', category: 'fields' },
   
   // Static content
   { id: 'header', type: 'header', label: 'Header', icon: 'Heading', category: 'static' },

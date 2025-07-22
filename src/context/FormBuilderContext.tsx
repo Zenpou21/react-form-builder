@@ -42,6 +42,7 @@ interface FormBuilderState {
 type FormBuilderAction =
   | { type: 'SET_FORM'; payload: FormConfig }
   | { type: 'ADD_FIELD'; payload: FormField }
+  | { type: 'ADD_FIELD_AT_POSITION'; payload: { field: FormField; position: number } }
   | { type: 'UPDATE_FIELD'; payload: { id: string; updates: Partial<FormField> } }
   | { type: 'UPDATE_FIELD_PROPERTIES'; payload: { id: string; properties: any } }
   | { type: 'UPDATE_FIELD_ADVANCED'; payload: { id: string; advanced: any } }
@@ -97,6 +98,22 @@ function formBuilderReducer(state: FormBuilderState, action: FormBuilderAction):
           fields: [...state.currentForm.fields, fieldWithUniqueName]
         },
         selectedFieldId: action.payload.id
+      };
+
+    case 'ADD_FIELD_AT_POSITION':
+      const fieldWithUniqueNameAtPosition = {
+        ...action.payload.field,
+        name: generateUniqueFieldName(action.payload.field, state.currentForm.fields)
+      };
+      const newFields = [...state.currentForm.fields];
+      newFields.splice(action.payload.position, 0, fieldWithUniqueNameAtPosition);
+      return {
+        ...state,
+        currentForm: {
+          ...state.currentForm,
+          fields: newFields
+        },
+        selectedFieldId: action.payload.field.id
       };
 
     case 'UPDATE_FIELD':
@@ -286,6 +303,7 @@ interface FormBuilderContextType {
   actions: {
     setForm: (form: FormConfig) => void;
     addField: (field: FormField) => void;
+    addFieldAtPosition: (field: FormField, position: number) => void;
     updateField: (id: string, updates: Partial<FormField>) => void;
     updateFieldProperties: (id: string, properties: any) => void;
     updateFieldAdvanced: (id: string, advanced: any) => void;
@@ -311,6 +329,8 @@ export function FormBuilderProvider({ children }: { children: ReactNode }) {
   const actions = {
     setForm: (form: FormConfig) => dispatch({ type: 'SET_FORM', payload: form }),
     addField: (field: FormField) => dispatch({ type: 'ADD_FIELD', payload: field }),
+    addFieldAtPosition: (field: FormField, position: number) => 
+      dispatch({ type: 'ADD_FIELD_AT_POSITION', payload: { field, position } }),
     updateField: (id: string, updates: Partial<FormField>) => 
       dispatch({ type: 'UPDATE_FIELD', payload: { id, updates } }),
     updateFieldProperties: (id: string, properties: any) => 

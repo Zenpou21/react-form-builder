@@ -26,7 +26,7 @@ function DraggableField({
   category,
 }: DraggableFieldProps) {
   const { addField } = useFormBuilder().actions;
-  const isComingSoon = category === "static" || category === "structure";
+  const isComingSoon = category === "structure"; // Only structure category is coming soon
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({

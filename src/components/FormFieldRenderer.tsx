@@ -666,13 +666,122 @@ export function FormFieldRenderer({
         </div>
       );
 
-    case "paragraph":
+    case "header":
+      const headerLayoutClasses = [
+        field.properties?.marginTop || '',
+        field.properties?.marginBottom || '',
+        field.properties?.padding || '',
+        field.properties?.alignment || ''
+      ].filter(Boolean).join(' ');
+      
+      // Provide default layout values when no properties are set
+      const defaultHeaderClasses = (!field.properties?.marginTop && !field.properties?.marginBottom && !field.properties?.padding && !field.properties?.alignment) 
+        ? 'my-8 py-6 text-center' 
+        : '';
+      
+      // Use layout padding if specified, otherwise fall back to default py-4
+      const defaultContainerClasses = field.properties?.padding ? '' : '';
+      const containerClasses = field.properties?.containerClasses || defaultContainerClasses;
+      
+      // Debug: Log the classes being applied
+      console.log('Header Layout Classes:', {
+        marginTop: field.properties?.marginTop,
+        marginBottom: field.properties?.marginBottom,
+        padding: field.properties?.padding,
+        alignment: field.properties?.alignment,
+        headerLayoutClasses,
+        defaultHeaderClasses,
+        containerClasses,
+        finalClasses: `header-field ${containerClasses} ${headerLayoutClasses} ${defaultHeaderClasses} ${wrapperClasses}`
+      });
+      
       return (
-        <div className={`py-2 ${wrapperClasses}`}>
-          <h4 className="text-md font-medium mb-1">{field.label}</h4>
+        <div className={`header-field ${containerClasses} ${headerLayoutClasses} ${defaultHeaderClasses} ${wrapperClasses}`}>
+          <h1 className={`${field.properties?.titleClasses || "header-title"} ${!field.properties?.marginTop && !field.properties?.marginBottom ? 'mb-4' : ''}`}>
+            {field.label || "Header Title"}
+          </h1>
           {field.properties?.description && (
-            <p className="text-default-600">{field.properties?.description}</p>
+            <p className={`${field.properties?.descriptionClasses || "header-description"} ${!field.properties?.marginTop && !field.properties?.marginBottom ? 'mt-4' : ''}`}>
+              {field.properties.description}
+            </p>
           )}
+        </div>
+      );
+
+    case "paragraph":
+      const paragraphLayoutClasses = [
+        field.properties?.marginTop || '',
+        field.properties?.marginBottom || '',
+        field.properties?.padding || '',
+        field.properties?.alignment || ''
+      ].filter(Boolean).join(' ');
+      
+      // Provide default layout values when no properties are set
+      const defaultParagraphClasses = (!field.properties?.marginTop && !field.properties?.marginBottom && !field.properties?.padding && !field.properties?.alignment) 
+        ? 'my-3' 
+        : '';
+      
+      return (
+        <div className={`paragraph-field ${paragraphLayoutClasses} ${defaultParagraphClasses} ${wrapperClasses}`}>
+          {field.label && (
+            <h4 className={`paragraph-title ${!field.properties?.marginTop && !field.properties?.marginBottom ? 'mb-1' : ''}`}>{field.label}</h4>
+          )}
+          {field.properties?.description && (
+            <p className="paragraph-description">{field.properties.description}</p>
+          )}
+        </div>
+      );
+
+    case "image":
+      const imageLayoutClasses = [
+        field.properties?.marginTop || '',
+        field.properties?.marginBottom || '',
+        field.properties?.padding || '',
+        field.properties?.alignment || ''
+      ].filter(Boolean).join(' ');
+      
+      // Provide default layout values when no properties are set
+      const defaultImageClasses = (!field.properties?.marginTop && !field.properties?.marginBottom && !field.properties?.padding && !field.properties?.alignment) 
+        ? 'my-4 text-center' 
+        : '';
+      
+      // Debug: Log image properties
+      console.log('FormFieldRenderer Image Debug:', {
+        fieldId: field.id,
+        fieldLabel: field.label,
+        imageUrl: field.properties?.imageUrl,
+        altText: field.properties?.altText,
+        maxHeight: field.properties?.maxHeight,
+        properties: field.properties
+      });
+      
+      return (
+        <div className={`image-field ${imageLayoutClasses} ${defaultImageClasses} ${wrapperClasses}`}>
+          {field.label && (
+            <h4 className={`image-title ${!field.properties?.marginTop && !field.properties?.marginBottom ? 'mb-2' : ''}`}>{field.label}</h4>
+          )}
+          <div>
+            {field.properties?.imageUrl ? (
+              <img
+                src={field.properties.imageUrl}
+                alt={field.properties?.altText || field.label || "Image"}
+                className="image-actual"
+                style={{
+                  maxHeight: field.properties?.maxHeight || '400px'
+                }}
+              />
+            ) : (
+              <div className="image-placeholder">
+                <div>
+                  <Upload size={32} style={{ margin: '0 auto 8px' }} />
+                  <p>No image URL provided</p>
+                  {field.properties?.description && (
+                    <p style={{ fontSize: '0.875rem', marginTop: '4px' }}>{field.properties.description}</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       );
 

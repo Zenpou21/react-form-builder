@@ -179,6 +179,12 @@ export interface FieldProperties {
   orientation?: 'vertical' | 'horizontal'; // Layout orientation for radio and checkbox groups
   componentAlignment?: 'left' | 'center' | 'right'; // Unified alignment for labels and components in radio, checkbox, switch, and rating
   
+  // Image Properties
+  imageUrl?: string; // URL for image fields
+  altText?: string; // Alt text for image accessibility
+  maxHeight?: string; // Max height for images (e.g., '400px')
+  maxWidth?: string; // Max width for images (e.g., '100%')
+  
   // Responsive Properties
   hideOnMobile?: boolean;
   hideOnTablet?: boolean;
@@ -192,6 +198,11 @@ export interface FieldProperties {
   size?: 'small' | 'medium' | 'large' | 'sm' | 'md' | 'lg';
   borderRadius?: 'none' | 'small' | 'default' | 'large' | 'full' | 'sm' | 'md' | 'lg';
   variant?: 'solid' | 'bordered' | 'light' | 'flat' | 'faded' | 'shadow' | 'ghost';
+  
+  // Header-specific styling properties
+  titleClasses?: string; // CSS classes for header title
+  descriptionClasses?: string; // CSS classes for header description
+  containerClasses?: string; // CSS classes for header container
   
   // Advanced Options
   disabled?: boolean;

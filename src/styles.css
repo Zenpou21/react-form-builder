@@ -9,3 +9,216 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Drag and Drop Styles */
+.dragging {
+  opacity: 0.5;
+  cursor: grabbing !important;
+  z-index: 1000;
+}
+
+.drag-overlay {
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* Drop zone styles */
+.drop-zone-active {
+  border: 2px dashed #3b82f6;
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.drop-zone-over {
+  border-color: #1d4ed8;
+  background-color: rgba(29, 78, 216, 0.1);
+}
+
+/* Drop indicator dots animation */
+.drop-dots {
+  animation: pulse-dots 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-dots {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+/* Enhanced drop zone visual feedback */
+.drop-zone-indicator {
+  position: relative;
+  transition: all 0.2s ease-in-out;
+  border-radius: 4px;
+}
+
+.drop-zone-indicator:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.drop-zone-indicator.active {
+  background-color: rgba(59, 130, 246, 0.1);
+  border: 1px dashed #3b82f6;
+}
+
+/* Drop zone tooltip */
+.drop-zone-tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Draggable field styles */
+.draggable-field {
+  cursor: grab;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.draggable-field:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.draggable-field:active {
+  cursor: grabbing;
+}
+
+.draggable-field.disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Form canvas styles */
+.form-canvas {
+  min-height: 400px;
+  position: relative;
+}
+
+.form-canvas.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #e5e7eb;
+  border-radius: 8px;
+  background-color: #f9fafb;
+}
+
+.form-canvas.empty:hover {
+  border-color: #d1d5db;
+  background-color: #f3f4f6;
+}
+
+/* Sortable styles */
+.sortable-item {
+  transition: transform 0.2s ease;
+}
+
+.sortable-item.dragging {
+  opacity: 0.3;
+  transform: scale(1.02);
+  z-index: 100;
+}
+
+/* Field hover and selection styles */
+.field-wrapper {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.field-wrapper:hover {
+  border-color: #e5e7eb;
+  background-color: rgba(243, 244, 246, 0.3);
+}
+
+.field-wrapper.selected {
+  border-color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.field-wrapper .field-controls {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.field-wrapper:hover .field-controls,
+.field-wrapper.selected .field-controls {
+  opacity: 1;
+}
+
+/* Static Field Styles - Only default styling, no layout properties */
+.header-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #030712;
+  line-height: 1.1;
+  letter-spacing: -0.05em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  /* Remove static margin to allow dynamic spacing */
+}
+
+.header-description {
+  font-size: 1.375rem;
+  color: #374151;
+  line-height: 1.7;
+  font-weight: 400;
+  /* Remove static margin, max-width, margin-left/right to allow dynamic layout */
+}
+
+/* Responsive header styles */
+@media (max-width: 768px) {
+  .header-title {
+    font-size: 2.25rem;
+  }
+  
+  .header-description {
+    font-size: 1.125rem;
+  }
+}
+
+.paragraph-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  /* Remove static margin to allow dynamic spacing */
+}
+
+.paragraph-description {
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.image-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  /* Remove static margin to allow dynamic spacing */
+}
+
+.image-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 400px;
+  height: 200px;
+  background-color: #f3f4f6;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.image-actual {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

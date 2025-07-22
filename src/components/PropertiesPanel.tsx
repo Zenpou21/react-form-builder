@@ -3,6 +3,7 @@ import {
   Card,
   CardBody,
   Input,
+  Textarea,
   Switch,
   Select,
   SelectItem,
@@ -100,7 +101,7 @@ function BasicProperties({ field }: { field: FormField }) {
         description="Used as the key in form submissions"
       />
 
-      {field.type !== "section" && field.type !== "paragraph" && (
+      {!["section", "paragraph", "header"].includes(field.type) && (
         <Input
           key={`placeholder-${field.id}`}
           label="Placeholder"
@@ -111,7 +112,7 @@ function BasicProperties({ field }: { field: FormField }) {
       )}
 
       {/* Description field for HeroUI description prop */}
-      {field.type !== "section" && field.type !== "paragraph" && (
+      {!["section", "paragraph", "header"].includes(field.type) && (
         <Input
           key={`description-${field.id}`}
           label="Description"
@@ -121,6 +122,55 @@ function BasicProperties({ field }: { field: FormField }) {
           size="sm"
           description="Helper text shown below the input field"
         />
+      )}
+
+      {/* Description field for static content fields (header, paragraph, image) */}
+      {["header", "paragraph", "image"].includes(field.type) && (
+        <Textarea
+          key={`description-${field.id}`}
+          label={field.type === "header" ? "Header Description (Optional)" : field.type === "paragraph" ? "Paragraph Content" : "Image Description"}
+          placeholder={field.type === "header" ? "Enter header description or subtitle..." : field.type === "paragraph" ? "Enter paragraph content..." : "Enter image description..."}
+          value={field.properties?.description || ""}
+          onValueChange={(value: string) => updateProperties({ description: value })}
+          size="sm"
+          rows={3}
+          description={field.type === "header" ? "Add a subtitle or description below your header" : field.type === "paragraph" ? "The main content text for your paragraph" : "Description or caption for the image"}
+        />
+      )}
+
+      {/* Image-specific fields */}
+      {field.type === "image" && (
+        <>
+          <Input
+            key={`imageUrl-${field.id}`}
+            label="Image URL"
+            placeholder="https://example.com/image.jpg"
+            value={field.properties?.imageUrl || ""}
+            onValueChange={(value) => updateProperties({ imageUrl: value })}
+            size="sm"
+            description="The URL of the image to display"
+          />
+          
+          <Input
+            key={`altText-${field.id}`}
+            label="Alt Text (Accessibility)"
+            placeholder="Describe the image for screen readers"
+            value={field.properties?.altText || ""}
+            onValueChange={(value) => updateProperties({ altText: value })}
+            size="sm"
+            description="Alternative text for accessibility (required for screen readers)"
+          />
+          
+          <Input
+            key={`maxHeight-${field.id}`}
+            label="Max Height"
+            placeholder="e.g., 400px, 100%, auto"
+            value={field.properties?.maxHeight || ""}
+            onValueChange={(value) => updateProperties({ maxHeight: value })}
+            size="sm"
+            description="Maximum height for the image"
+          />
+        </>
       )}
 
       {/* Add Read Only and Disabled for input fields */}
@@ -761,6 +811,97 @@ function CustomProperties({ field }: { field: FormField }) {
 
   return (
     <div className="space-y-4 py-4">
+      {/* Header-specific styling properties */}
+      {field.type === 'header' && (
+        <div className="space-y-3 border-b border-divider pb-4">
+          <h5 className="text-xs font-medium text-default-600">Header Styling</h5>
+          
+          <Input
+            key={`titleClasses-${field.id}`}
+            label="Header Title CSS Classes"
+            placeholder="e.g., text-4xl font-bold text-blue-600"
+            value={field.properties?.titleClasses || ""}
+            onValueChange={(value: string) => updateProperties({ titleClasses: value })}
+            size="sm"
+            description="Tailwind classes for the header title styling"
+          />
+          
+          <Input
+            key={`descriptionClasses-${field.id}`}
+            label="Header Description CSS Classes"
+            placeholder="e.g., text-lg text-gray-600 italic"
+            value={field.properties?.descriptionClasses || ""}
+            onValueChange={(value: string) => updateProperties({ descriptionClasses: value })}
+            size="sm"
+            description="Tailwind classes for the header description styling"
+          />
+          
+          <Input
+            key={`containerClasses-${field.id}`}
+            label="Header Container CSS Classes"
+            placeholder="e.g., bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg"
+            value={field.properties?.containerClasses || ""}
+            onValueChange={(value: string) => updateProperties({ containerClasses: value })}
+            size="sm"
+            description="Tailwind classes for the header container styling"
+          />
+          
+          <div className="space-y-2">
+            <h6 className="text-xs font-medium text-gray-700">Quick Presets</h6>
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                size="sm"
+                variant="flat"
+                color="primary"
+                onPress={() => updateProperties({ 
+                  titleClasses: "text-4xl font-bold text-gray-900",
+                  descriptionClasses: "text-lg text-gray-600",
+                  containerClasses: ""
+                })}
+              >
+                Default
+              </Button>
+              <Button
+                size="sm"
+                variant="flat"
+                color="secondary"
+                onPress={() => updateProperties({ 
+                  titleClasses: "text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600",
+                  descriptionClasses: "text-xl text-gray-500 font-light",
+                  containerClasses: "py-12 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg"
+                })}
+              >
+                Gradient
+              </Button>
+              <Button
+                size="sm"
+                variant="flat"
+                color="success"
+                onPress={() => updateProperties({ 
+                  titleClasses: "text-3xl font-semibold text-green-800 uppercase tracking-wide",
+                  descriptionClasses: "text-base text-green-600",
+                  containerClasses: "py-4 bg-green-50 border-l-4 border-green-500"
+                })}
+              >
+                Success
+              </Button>
+              <Button
+                size="sm"
+                variant="flat"
+                color="danger"
+                onPress={() => updateProperties({ 
+                  titleClasses: "text-2xl font-bold text-red-800",
+                  descriptionClasses: "text-sm text-red-600 font-medium",
+                  containerClasses: "py-3 bg-red-50 border border-red-200 rounded"
+                })}
+              >
+                Alert
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="space-y-2">
         <h5 className="text-xs font-medium text-default-600">HeroUI ClassNames</h5>
         

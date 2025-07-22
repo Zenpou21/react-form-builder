@@ -104,6 +104,10 @@ export interface FormFieldExport {
     dataAttributes?: string;
     ariaLabel?: string;
     tabIndex?: number;
+    // Header-specific styling properties
+    titleClasses?: string; // CSS classes for header title
+    descriptionClasses?: string; // CSS classes for header description
+    containerClasses?: string; // CSS classes for header container
   };
   layout: {
     columnSpan: number;
@@ -211,6 +215,10 @@ export function generateFormExportData(form: FormConfig): FormExportData {
         dataAttributes: field.properties?.dataAttributes,
         ariaLabel: field.properties?.ariaLabel,
         tabIndex: field.properties?.tabIndex,
+        // Header-specific CSS classes
+        titleClasses: field.properties?.titleClasses,
+        descriptionClasses: field.properties?.descriptionClasses,
+        containerClasses: field.properties?.containerClasses,
       },
       layout: {
         columnSpan: field.columnSpan || span,

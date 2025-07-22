@@ -10,8 +10,16 @@ import {
   useDisclosure,
   Chip,
 } from "@heroui/react";
-import { DndContext } from "@dnd-kit/core";
-import type { DragEndEvent, DragOverEvent } from "@dnd-kit/core";
+import { 
+  DndContext,
+  DragOverlay,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors
+} from "@dnd-kit/core";
+import type { DragEndEvent, DragOverEvent, DragStartEvent } from "@dnd-kit/core";
 import {
   FormBuilderProvider,
   useFormBuilder,
@@ -149,6 +157,21 @@ function FormBuilderContent() {
   const { state, actions } = useFormBuilder();
   const { currentForm, previewMode } = state;
 
+  // Configure drag sensors for better touch and mouse support
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // 8px movement before drag starts
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 200, // 200ms delay for touch
+        tolerance: 8,
+      },
+    })
+  );
+
   // Modal controls for mobile panels
   const {
     isOpen: isElementsOpen,
@@ -164,23 +187,55 @@ function FormBuilderContent() {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    
+    console.log('Drag ended:', { activeId: active.id, overId: over?.id });
 
-    if (!over) return;
+    if (!over) {
+      console.log('No drop target found');
+      return;
+    }
 
-    // Handle dropping from sidebar to canvas
+    // Handle dropping from sidebar to canvas or drop zones
     if (
-      over.id === "form-canvas" &&
+      (over.id === "form-canvas" || 
+       over.id === "drop-zone-top" || 
+       over.id === "drop-zone-bottom" || 
+       String(over.id).startsWith("drop-zone-")) &&
       typeof active.id === "string" &&
       !active.id.includes("-")
     ) {
+      console.log('Dropping field to canvas/drop zone:', active.id);
       const fieldType = active.id as FormFieldType;
       const newField = createFormField(fieldType);
-      actions.addField(newField);
+      
+      // Handle positioning based on drop zone
+      if (over.id === "drop-zone-top") {
+        // Add to beginning
+        actions.addFieldAtPosition(newField, 0);
+      } else if (over.id === "drop-zone-bottom") {
+        // Add to end (default behavior)
+        actions.addField(newField);
+      } else if (String(over.id).startsWith("drop-zone-after-row-")) {
+        // Extract the field position from the drop zone ID
+        // Format: "drop-zone-after-row-{rowIndex}-field-{fieldIndex}"
+        const match = String(over.id).match(/drop-zone-after-row-\d+-field-(\d+)/);
+        if (match) {
+          const lastFieldIndex = parseInt(match[1]);
+          actions.addFieldAtPosition(newField, lastFieldIndex + 1);
+        } else {
+          // Fallback to end
+          actions.addField(newField);
+        }
+      } else {
+        // Default to end
+        actions.addField(newField);
+      }
       return;
     }
 
     // Handle reordering within canvas
     if (active.id !== over.id) {
+      console.log('Reordering fields:', { from: active.id, to: over.id });
       const oldIndex = currentForm.fields.findIndex(
         (field) => field.id === active.id
       );
@@ -203,7 +258,12 @@ function FormBuilderContent() {
       <div className="h-[calc(100vh-120px)] font-sans flex flex-col bg-background">
         <FormBuilderToolbar />
         <div className="flex flex-1 overflow-hidden">
-          <DndContext onDragEnd={handleDragEnd} onDragOver={handleDragOver}>
+          <DndContext 
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd} 
+            onDragOver={handleDragOver}
+          >
             {/* Desktop Sidebar - Hidden on mobile */}
             {!previewMode && (
               <div className="hidden md:block md:w-1/4">

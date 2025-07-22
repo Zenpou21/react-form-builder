@@ -1,6 +1,7 @@
 export { FormBuilder } from './FormBuilder';
 export { FormCanvas } from './FormCanvas';
 export { FieldSidebar } from './FieldSidebar';
+export { FieldSelector } from './FieldSelector';
 export { SortableFormField } from './SortableFormField';
 export { FormFieldRenderer } from './FormFieldRenderer';
 export { PropertiesPanel } from './PropertiesPanel';
