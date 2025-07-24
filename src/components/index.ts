@@ -9,3 +9,5 @@ export { FormBuilderToolbar } from './FormBuilderToolbar';
 export { FormRowRenderer } from './FormRowRenderer';
 export { FormRenderer } from './FormRenderer';
 export { FormBuilderSuite } from './FormBuilderSuite';
+export { ResizeHandles } from './ResizeHandles';
+export { SignaturePad } from './SignaturePad';

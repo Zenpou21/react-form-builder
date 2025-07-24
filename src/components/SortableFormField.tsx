@@ -3,6 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { Button, ButtonGroup } from "@heroui/react";
 import { GripVertical, Edit, Trash2, Copy } from "lucide-react";
 import { FormFieldRenderer } from "./FormFieldRenderer";
+import { ResizeHandles } from "./ResizeHandles";
 import { useFormBuilder } from "../context/FormBuilderContext";
 import { buildFieldWrapperClasses } from "../utils/fieldStyles";
 import type { FormField } from "../types/form";
@@ -80,69 +81,71 @@ export function SortableFormField({
       `}
       onClick={!isDragging ? handleSelect : undefined}
     >
-      <div
-        className={`
-          border transition-all duration-200 cursor-pointer
-          ${
-            isSelected
-              ? "border-primary shadow-lg"
-              : "border-default-200 hover:border-default-300"
-          }
-          ${isDragging ? "shadow-2xl" : ""}
-        `}
-      >
-        <div className="p-2">
-          {/* Field Controls */}
-          <div className="flex items-center justify-between mb-2 ">
-            <div className="flex items-center gap-2">
-              <div
-                {...attributes}
-                {...listeners}
-                className="cursor-grab active:cursor-grabbing p-1 hover:bg-default-100 rounded"
-              >
-                <GripVertical className="text-default-400" size={14} />
+      <ResizeHandles field={field} isSelected={isSelected}>
+        <div
+          className={`
+            border transition-all duration-200 cursor-pointer
+            ${
+              isSelected
+                ? "border-primary shadow-lg"
+                : "border-default-200 hover:border-default-300"
+            }
+            ${isDragging ? "shadow-2xl" : ""}
+          `}
+        >
+          <div className="p-2">
+            {/* Field Controls */}
+            <div className="flex items-center justify-between mb-2 ">
+              <div className="flex items-center gap-2">
+                <div
+                  {...attributes}
+                  {...listeners}
+                  className="cursor-grab active:cursor-grabbing p-1 hover:bg-default-100 rounded"
+                >
+                  <GripVertical className="text-default-400" size={14} />
+                </div>
+                <span className="text-xs text-default-600 font-medium">
+                  {field.type.charAt(0).toUpperCase() + field.type.slice(1)}
+                </span>
               </div>
-              <span className="text-xs text-default-600 font-medium">
-                {field.type.charAt(0).toUpperCase() + field.type.slice(1)}
-              </span>
+
+              <ButtonGroup size="sm" variant="flat">
+                <Button
+                  isIconOnly
+                  onPress={handleEdit}
+                  color={isSelected ? "primary" : "default"}
+                >
+                  <Edit size={16} />
+                </Button>
+                <Button isIconOnly onPress={handleDuplicate}>
+                  <Copy size={16} />
+                </Button>
+                <Button isIconOnly color="danger" onPress={handleDelete}>
+                  <Trash2 size={16} />
+                </Button>
+              </ButtonGroup>
             </div>
 
-            <ButtonGroup size="sm" variant="flat">
-              <Button
-                isIconOnly
-                onPress={handleEdit}
-                color={isSelected ? "primary" : "default"}
-              >
-                <Edit size={16} />
-              </Button>
-              <Button isIconOnly onPress={handleDuplicate}>
-                <Copy size={16} />
-              </Button>
-              <Button isIconOnly color="danger" onPress={handleDelete}>
-                <Trash2 size={16} />
-              </Button>
-            </ButtonGroup>
-          </div>
+            {/* Field Preview */}
+            <div className="pointer-events-none">
+              <FormFieldRenderer field={field} />
+            </div>
 
-          {/* Field Preview */}
-          <div className="pointer-events-none">
-            <FormFieldRenderer field={field} />
-          </div>
-
-          {/* Field Info */}
-          <div className="mt-2 pt-2 border-t border-default-200">
-            <div className="flex items-center justify-between text-xs text-default-500">
-              <div className="flex items-center gap-2">
-                <span>Req: {field.required ? "Yes" : "No"}</span>
-                {field.validation && field.validation.length > 0 && (
-                  <span>Val: {field.validation.length}</span>
-                )}
+            {/* Field Info */}
+            <div className="mt-2 pt-2 border-t border-default-200">
+              <div className="flex items-center justify-between text-xs text-default-500">
+                <div className="flex items-center gap-2">
+                  <span>Req: {field.required ? "Yes" : "No"}</span>
+                  {field.validation && field.validation.length > 0 && (
+                    <span>Val: {field.validation.length}</span>
+                  )}
+                </div>
+                <span>ID: {field.id.slice(0, 6)}...</span>
               </div>
-              <span>ID: {field.id.slice(0, 6)}...</span>
             </div>
           </div>
         </div>
-      </div>
+      </ResizeHandles>
     </div>
   );
 }

@@ -13,9 +13,17 @@ export interface FormField {
   rowId?: string; // For grouping fields into rows
   columnSpan?: number; // 1-12 for grid system
   layout?: {
-    columnSpan?: number;
+    columnSpan?: number; // Width (X-axis): 1-12 grid columns
+    rowSpan?: number; // Height (Y-axis): how many rows the element spans
     rowId?: string;
     gridClass?: string;
+    startNewRow?: boolean; // Whether this element should start a new row
+    width?: string; // CSS width (%, px, rem, etc.)
+    height?: string; // CSS height (px, rem, auto, etc.)
+    minWidth?: string; // Minimum width
+    maxWidth?: string; // Maximum width
+    minHeight?: string; // Minimum height
+    maxHeight?: string; // Maximum height
   };
   
   // Advanced Properties (matching formengine.io)
@@ -148,7 +156,12 @@ export interface FieldProperties {
   description?: string;
   customClasses?: string;
   classNames?: Partial<Record<'base' | 'label' | 'inputWrapper' | 'innerWrapper' | 'mainWrapper' | 'input' | 'clearButton' | 'helperWrapper' | 'description' | 'errorMessage', string>>;
-  width?: 'full' | 'half' | 'third' | 'quarter';
+  width?: string; // CSS width (%, px, rem, auto, full, half, third, quarter, etc.)
+  height?: string; // CSS height (px, rem, auto, etc.)
+  minWidth?: string; // Minimum width
+  maxWidth?: string; // Maximum width
+  minHeight?: string; // Minimum height
+  maxHeight?: string; // Maximum height
   rows?: number; // for textarea
   multiple?: boolean; // for select
   accept?: string; // for file upload
@@ -156,6 +169,8 @@ export interface FieldProperties {
   max?: number;
   step?: number;
   startNewRow?: boolean; // Force this field to start a new row
+  columnSpan?: number; // Grid column span (1-12)
+  rowSpan?: number; // Grid row span (1-6)
   
   // Custom field type for extensibility
   customType?: string;
@@ -182,8 +197,6 @@ export interface FieldProperties {
   // Image Properties
   imageUrl?: string; // URL for image fields
   altText?: string; // Alt text for image accessibility
-  maxHeight?: string; // Max height for images (e.g., '400px')
-  maxWidth?: string; // Max width for images (e.g., '100%')
   
   // Responsive Properties
   hideOnMobile?: boolean;

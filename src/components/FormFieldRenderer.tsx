@@ -34,6 +34,7 @@ export function FormFieldRenderer({
   value,
   onChange,
 }: FormFieldRendererProps) {
+  
   const handleChange = (newValue: any) => {
     if (onChange) {
       onChange(newValue);
@@ -179,7 +180,8 @@ export function FormFieldRenderer({
 
   const characterCount = getCharacterCount();
 
-  switch (field.type) {
+  const renderField = () => {
+    switch (field.type) {
     case "text":
       return (
         <FieldWithIndicators>
@@ -882,7 +884,10 @@ export function FormFieldRenderer({
           </p>
         </div>
       );
-  }
+    }
+  };
+
+  return renderField();
 }
 
 // Export both named and default for compatibility

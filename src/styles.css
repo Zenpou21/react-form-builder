@@ -216,9 +216,108 @@
   font-size: 0.875rem;
 }
 
+/* Resize cursor styles */
+.cursor-nw-resize {
+  cursor: nw-resize;
+}
+
+.cursor-ne-resize {
+  cursor: ne-resize;
+}
+
+.cursor-sw-resize {
+  cursor: sw-resize;
+}
+
+.cursor-se-resize {
+  cursor: se-resize;
+}
+
+.cursor-n-resize {
+  cursor: n-resize;
+}
+
+.cursor-s-resize {
+  cursor: s-resize;
+}
+
+.cursor-w-resize {
+  cursor: w-resize;
+}
+
+.cursor-e-resize {
+  cursor: e-resize;
+}
+
 .image-actual {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Interactive Resize Handles */
+.resize-handle {
+  position: absolute;
+  background: #3b82f6;
+  border: 1px solid white;
+  border-radius: 2px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+}
+
+.resize-handle:hover {
+  opacity: 1 !important;
+}
+
+/* Show resize handles on field hover/selection */
+.field-wrapper:hover .resize-handle,
+.field-wrapper.selected .resize-handle {
+  opacity: 0.7;
+}
+
+.field-wrapper:hover .resize-handle:hover,
+.field-wrapper.selected .resize-handle:hover {
+  opacity: 1;
+}
+
+/* Custom resize cursors */
+.cursor-nw-resize { cursor: nw-resize; }
+.cursor-ne-resize { cursor: ne-resize; }
+.cursor-sw-resize { cursor: sw-resize; }
+.cursor-se-resize { cursor: se-resize; }
+.cursor-n-resize { cursor: n-resize; }
+.cursor-s-resize { cursor: s-resize; }
+.cursor-w-resize { cursor: w-resize; }
+.cursor-e-resize { cursor: e-resize; }
+
+/* Resizing state */
+.is-resizing {
+  user-select: none;
+  pointer-events: none;
+}
+
+.is-resizing * {
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Row break indicator */
+.row-break-handle {
+  position: absolute;
+  top: -12px;
+  left: 0;
+  padding: 2px 8px;
+  font-size: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  opacity: 0;
+  z-index: 15;
+}
+
+.field-wrapper:hover .row-break-handle,
+.field-wrapper.selected .row-break-handle {
+  opacity: 1;
 }
